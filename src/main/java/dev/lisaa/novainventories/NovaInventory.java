@@ -42,7 +42,10 @@ public abstract class NovaInventory {
     }
 
     protected abstract void configure();
+
     protected abstract void render(Player player);
+
+    protected abstract Component getCurrentTitle();
 
     /* ================= CREATION ================= */
 
@@ -81,10 +84,21 @@ public abstract class NovaInventory {
     }
 
     public void reopen(Player player) {
+
         items.clear();
-        inventory.clear();
+
+        inventory = Bukkit.createInventory(
+                player,
+                type == InventoryType.CHEST
+                        ? size.getSize()
+                        : type.getDefaultSize(),
+                getCurrentTitle()
+        );
+
         render(player);
-        open(player);
+
+        player.openInventory(inventory);
+        manager.markOpen(player.getUniqueId(), this);
     }
 
     /* ================= CLICK HANDLING ================= */
