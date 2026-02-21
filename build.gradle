@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'dev.lisaa.novainventories'
+version = '1.0.4-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'papermc'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            groupId = project.group
+            artifactId = project.name
+            version = project.version
+        }
+    }
+
+    repositories {
+        maven {
+            name = "lisaaCentral"
+
+            def repoType = project.version.toString().endsWith('-SNAPSHOT') ? 'snapshots' : 'releases'
+            url = uri("https://artifactory.lisaa.dev/maven-${repoType}")
+
+            credentials(PasswordCredentials) {
+                username = project.findProperty("lisaaCentralUsername")
+                password = project.findProperty("lisaaCentralPassword")
+            }
+        }
+    }
+}
