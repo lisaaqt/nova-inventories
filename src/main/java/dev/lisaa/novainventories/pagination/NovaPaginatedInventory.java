@@ -23,11 +23,11 @@ public abstract class NovaPaginatedInventory<T> extends NovaInventory {
 
     /* ================= PAGE FORMAT CONFIG ================= */
 
-    protected final BiFunction<Integer, Integer, Component> pageFormat =
+    protected BiFunction<Integer, Integer, Component> pageFormat =
             (current, max) ->
                     Component.text(" §7(" + current + "/" + max + ")");
 
-    protected final boolean showPageIndicator = true;
+    protected boolean showPageIndicator = true;
 
     /* ================= ABSTRACT API ================= */
 
